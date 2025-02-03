@@ -6,20 +6,20 @@ public class CarInput : MonoBehaviour
     private PlayerInput _input;
     private InputAction _movementAction;
     public Vector2 MovementVector { get; private set; }
-    private Car car;
+    private Car _car;
 
-    void Awake()
+    private void Awake()
     {
         _input = GetComponent<PlayerInput>();
-        car = new Car();
-        car.CarControls.Enable();
-        car.CarControls.Move.performed += MoveCar;
+        _car = new Car();
+        _car.CarControls.Enable();
+        _car.CarControls.Move.performed += MoveCar;
     }
 
-    void OnDisable()
+    private void OnDisable()
     {
-        car.CarControls.Disable();
-        car.CarControls.Move.performed -= MoveCar;
+        _car.CarControls.Disable();
+        _car.CarControls.Move.performed -= MoveCar;
     }
 
     private void MoveCar(InputAction.CallbackContext obj)
