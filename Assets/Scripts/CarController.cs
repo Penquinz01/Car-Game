@@ -27,17 +27,17 @@ public class CarController : MonoBehaviour
         _vInput = _carInput.MovementVector.y;
         _hInput = _carInput.MovementVector.x;
         
-        float forwardSpeed = Vector3.Dot(transform.forward, _rb.linearVelocity);
+        var forwardSpeed = Vector3.Dot(transform.forward, _rb.linearVelocity);
         
-        float speedFactor = Mathf.InverseLerp(0, maxSpeed, forwardSpeed);
+        var speedFactor = Mathf.InverseLerp(0, maxSpeed, forwardSpeed);
         
-        float currentTorque = Mathf.Lerp(motorTorque, 0, speedFactor);
+        var currentTorque = Mathf.Lerp(motorTorque, 0, speedFactor);
         
-        float currentSteeringRange = Mathf.Lerp(maxSteeringAngle,maxSpeedSteeringAngle,speedFactor);
+        var currentSteeringRange = Mathf.Lerp(maxSteeringAngle,maxSpeedSteeringAngle,speedFactor);
         
-        bool isAccelerating = Mathf.Sign(_vInput) == Mathf.Sign(forwardSpeed);
+        var isAccelerating = Mathf.Approximately(Mathf.Sign(_vInput), Mathf.Sign(forwardSpeed));
 
-        foreach (WheelControl wheel in wheels)
+        foreach (var wheel in wheels)
         {
             if (wheel.isSteerable)
             {

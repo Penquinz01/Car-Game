@@ -1,3 +1,4 @@
+using Unity.VisualScripting.InputSystem;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -14,12 +15,19 @@ public class CarInput : MonoBehaviour
         _car = new Car();
         _car.CarControls.Enable();
         _car.CarControls.Move.performed += MoveCar;
+        _car.CarControls.Move.canceled += StopMovement;
+    }
+
+    private void StopMovement(InputAction.CallbackContext obj)
+    {
+        MovementVector = Vector2.zero;
     }
 
     private void OnDisable()
     {
         _car.CarControls.Disable();
         _car.CarControls.Move.performed -= MoveCar;
+        _car.CarControls.Move.canceled -= StopMovement;
     }
 
     private void MoveCar(InputAction.CallbackContext obj)
