@@ -2,27 +2,42 @@ using UnityEngine;
 
 public class CarController : MonoBehaviour
 {
-    [SerializeField] WheelControl[] wheels;
-    [SerializeField]float motorTorque = 2000;
-    [SerializeField]float brakeTorque = 2000;
-    [SerializeField]float maxSpeed = 30;
-    [SerializeField]float maxSteeringAngle = 30;
-    [SerializeField]float maxSpeedSteeringAngle = 10;
+    [SerializeField] private WheelControl[] wheels;
+    [SerializeField] private float motorTorque = 2000;
+    [SerializeField] private float brakeTorque = 2000;
+    [SerializeField] private float maxSpeed = 30;
+    [SerializeField] private float maxSteeringAngle = 30;
+    [SerializeField] private float maxSpeedSteeringAngle = 10;
     [SerializeField] private float centreOfGravityOffset = -1f;
 
     private Rigidbody _rb;
     private CarInput _carInput;
     private float _vInput;
     private float _hInput;
+    private bool _isBraking = false;
     private void Start()
     {
         _rb = GetComponent<Rigidbody>();
         _carInput = GetComponent<CarInput>();
         _rb.centerOfMass+= Vector3.up * centreOfGravityOffset;
+        _carInput.startedBraking += SetBraking;
+        _carInput.stoppedBraking += SetBraking;
+    }
+
+    private void OnDestroy()
+    {
+        _carInput.startedBraking -= SetBraking;
+        _carInput.stoppedBraking -= SetBraking;
+    }
+
+    private void SetBraking()
+    {
+        
+        _isBraking = !_isBraking;
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         _vInput = _carInput.MovementVector.y;
         _hInput = _carInput.MovementVector.x;
@@ -44,7 +59,12 @@ public class CarController : MonoBehaviour
                 wheel.WheelCollider.steerAngle = currentSteeringRange*_hInput;
             }
 
-            if (isAccelerating)
+            if (_isBraking)
+            {
+                wheel.WheelCollider.motorTorque = 0;
+                wheel.WheelCollider.brakeTorque = brakeTorque;
+            }
+            else if (isAccelerating)
             {
                 if (wheel.isMotorized)
                 {

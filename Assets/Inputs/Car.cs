@@ -35,6 +35,15 @@ public partial class @Car: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Brake"",
+                    ""type"": ""Button"",
+                    ""id"": ""703cb372-bd9e-4d9c-88df-c05992d85881"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -92,6 +101,17 @@ public partial class @Car: IInputActionCollection2, IDisposable
                     ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""88158a17-b66f-4d97-bd8b-5f5c6dbafab3"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Brake"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -101,6 +121,7 @@ public partial class @Car: IInputActionCollection2, IDisposable
         // CarControls
         m_CarControls = asset.FindActionMap("CarControls", throwIfNotFound: true);
         m_CarControls_Move = m_CarControls.FindAction("Move", throwIfNotFound: true);
+        m_CarControls_Brake = m_CarControls.FindAction("Brake", throwIfNotFound: true);
     }
 
     ~@Car()
@@ -168,11 +189,13 @@ public partial class @Car: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_CarControls;
     private List<ICarControlsActions> m_CarControlsActionsCallbackInterfaces = new List<ICarControlsActions>();
     private readonly InputAction m_CarControls_Move;
+    private readonly InputAction m_CarControls_Brake;
     public struct CarControlsActions
     {
         private @Car m_Wrapper;
         public CarControlsActions(@Car wrapper) { m_Wrapper = wrapper; }
         public InputAction @Move => m_Wrapper.m_CarControls_Move;
+        public InputAction @Brake => m_Wrapper.m_CarControls_Brake;
         public InputActionMap Get() { return m_Wrapper.m_CarControls; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -185,6 +208,9 @@ public partial class @Car: IInputActionCollection2, IDisposable
             @Move.started += instance.OnMove;
             @Move.performed += instance.OnMove;
             @Move.canceled += instance.OnMove;
+            @Brake.started += instance.OnBrake;
+            @Brake.performed += instance.OnBrake;
+            @Brake.canceled += instance.OnBrake;
         }
 
         private void UnregisterCallbacks(ICarControlsActions instance)
@@ -192,6 +218,9 @@ public partial class @Car: IInputActionCollection2, IDisposable
             @Move.started -= instance.OnMove;
             @Move.performed -= instance.OnMove;
             @Move.canceled -= instance.OnMove;
+            @Brake.started -= instance.OnBrake;
+            @Brake.performed -= instance.OnBrake;
+            @Brake.canceled -= instance.OnBrake;
         }
 
         public void RemoveCallbacks(ICarControlsActions instance)
@@ -212,5 +241,6 @@ public partial class @Car: IInputActionCollection2, IDisposable
     public interface ICarControlsActions
     {
         void OnMove(InputAction.CallbackContext context);
+        void OnBrake(InputAction.CallbackContext context);
     }
 }
