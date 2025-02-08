@@ -1,0 +1,9 @@
+.header {
+    -unity-font-definition: resource('FlatSkin/Font/Roboto-Medium');
+    font-size: 39px;
+    color: rgb(0, 0, 0);
+    -unity-text-align: middle-center;
+    -unity-font-style: normal;
+    border-top-width: 5px;
+    border-top-color: rgba(0, 0, 0, 0);
+}

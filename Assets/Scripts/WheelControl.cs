@@ -4,6 +4,7 @@ public class WheelControl : MonoBehaviour
 {
     public bool isSteerable;
     public bool isMotorized;
+    public bool isDriftable;
     public WheelCollider WheelCollider { get;private set; }
 
     private Vector3 _position;

@@ -9,6 +9,7 @@ public class CarController : MonoBehaviour
     [SerializeField] private float maxSteeringAngle = 30;
     [SerializeField] private float maxSpeedSteeringAngle = 10;
     [SerializeField] private float centreOfGravityOffset = -1f;
+    [SerializeField] private float handBrakeTorque = 10000;
 
     private Rigidbody _rb;
     private CarInput _carInput;
@@ -59,10 +60,10 @@ public class CarController : MonoBehaviour
                 wheel.WheelCollider.steerAngle = currentSteeringRange*_hInput;
             }
 
-            if (_isBraking)
+            if (_isBraking && wheel.isDriftable)
             {
                 wheel.WheelCollider.motorTorque = 0;
-                wheel.WheelCollider.brakeTorque = brakeTorque;
+                wheel.WheelCollider.brakeTorque = handBrakeTorque;
             }
             else if (isAccelerating)
             {
