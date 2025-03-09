@@ -10,7 +10,7 @@ public class CarController : MonoBehaviour
     [SerializeField] private float maxSpeedSteeringAngle = 10;
     [SerializeField] private float centreOfGravityOffset = -1f;
     [SerializeField] private float handBrakeTorque = 10000;
-
+    public AnimationCurve curve;
     private Rigidbody _rb;
     private CarInput _carInput;
     private float _vInput;
@@ -79,6 +79,10 @@ public class CarController : MonoBehaviour
                 wheel.WheelCollider.brakeTorque = Mathf.Abs(_vInput) * brakeTorque;
                 wheel.WheelCollider.motorTorque = 0;
             }
+        }
+        if (Input.GetKeyDown(KeyCode.B))
+        {
+            Debug.Log(curve.Evaluate(0.5f));
         }
     }
 }
